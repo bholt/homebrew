@@ -126,7 +126,11 @@ module Stdenv
     @compiler = :gcc_4_0
   end
   alias_method :gcc_4_0, :gcc_4_0_1
-
+  
+  def cc_custom_path
+    # do nothing, ENV.cc & ENV.cxx already set...
+  end
+  
   def gcc
     # Apple stopped shipping gcc-4.2 with Xcode 4.2
     # However they still provide a gcc symlink to llvm

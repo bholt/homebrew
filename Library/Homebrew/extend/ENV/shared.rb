@@ -93,6 +93,15 @@ module SharedEnvExtension
     @compiler ||= if (cc = ARGV.cc)
       COMPILER_SYMBOL_MAP.fetch(cc) do |other|
         if other =~ GNU_GCC_REGEXP then other
+        elsif File.exists? other
+          # treat it as a path to the executable
+          ENV.cc = other
+          if other =~ /.*\/gcc/
+            ENV.cxx = other.gsub(/(.*)(gcc)(.*)/,'\1g++\3')
+          else
+            raise "Unable to automatically determine C++ compiler from C compiler."
+          end
+          :cc_custom_path
         else
           raise "Invalid value for --cc: #{other}"
         end
